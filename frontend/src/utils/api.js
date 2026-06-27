@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: 'https://e-commerce-1-cuha.onrender.com/api',
 });
 
 // Request interceptor to add JWT token to Authorization headers
@@ -10,9 +10,11 @@ API.interceptors.request.use(
     const userInfo = localStorage.getItem('userInfo')
       ? JSON.parse(localStorage.getItem('userInfo'))
       : null;
+
     if (userInfo && userInfo.token) {
       config.headers.Authorization = `Bearer ${userInfo.token}`;
     }
+
     return config;
   },
   (error) => {
