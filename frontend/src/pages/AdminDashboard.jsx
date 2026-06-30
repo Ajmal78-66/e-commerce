@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import { Plus, Edit, Trash, Users, ShoppingBag, Folder, Settings, ShieldAlert, X } from 'lucide-react';
 import { ProductContext } from '../context/ProductContext';
 import { AuthContext } from '../context/AuthContext';
@@ -443,13 +444,13 @@ const AdminDashboard = () => {
                           )}
                         </td>
                         <td style={{ padding: '12px 8px', textAlign: 'right' }}>
-                          <a
-                            href={`/order/${ord._id}`}
+                          <Link
+                            to={`/order/${ord._id}`}
                             className="cyber-btn cyber-btn-secondary"
                             style={{ padding: '4px 10px', fontSize: '0.7rem', borderRadius: '4px' }}
                           >
                             Access
-                          </a>
+                          </Link>
                         </td>
                       </tr>
                     ))}
