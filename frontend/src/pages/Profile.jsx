@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { User, ShieldAlert, Award, Calendar, ExternalLink } from 'lucide-react';
+import { User, ShieldAlert, Award, Calendar, ExternalLink, Heart, ShoppingCart, Trash2 } from 'lucide-react';
 import { AuthContext } from '../context/AuthContext';
+import { WishlistContext } from '../context/WishlistContext';
+import { CartContext } from '../context/CartContext';
 import API from '../utils/api';
 
 const Profile = () => {
   const { user, updateProfile } = useContext(AuthContext);
+
+  const { wishlistItems, toggleWishlist, loading: wishlistLoading } = useContext(WishlistContext);
+  const { addToCart } = useContext(CartContext);
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -232,6 +237,93 @@ const Profile = () => {
                       </Link>
                     </div>
 
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Saved Wishlist Box */}
+          <div className="glass-panel" style={{ padding: '30px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '25px' }}>
+              <Heart size={24} style={{ color: 'var(--accent-pink)' }} />
+              <h2 style={{ fontSize: '1.25rem', color: '#fff' }}>
+                SAVED BLUEPRINTS (WISHLIST)
+              </h2>
+            </div>
+
+            {wishlistLoading ? (
+              <div style={{ padding: '20px 0', textAlign: 'center' }}>
+                <div className="cyber-loader" style={{ width: '30px', height: '30px' }}></div>
+              </div>
+            ) : wishlistItems.length === 0 ? (
+              <div style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>
+                No blueprint augments saved to user database.
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxHeight: '350px', overflowY: 'auto' }}>
+                {wishlistItems.map((item) => (
+                  <div
+                    key={item._id}
+                    className="glass-panel"
+                    style={{
+                      padding: '12px 16px',
+                      background: 'rgba(0,0,0,0.3)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      flexWrap: 'wrap',
+                      gap: '12px',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        style={{
+                          width: '45px',
+                          height: '45px',
+                          objectFit: 'cover',
+                          borderRadius: '6px',
+                          border: '1px solid var(--border-color)',
+                        }}
+                      />
+                      <div>
+                        <Link
+                          to={`/product/${item._id}`}
+                          style={{ color: '#fff', fontWeight: '500', fontSize: '0.9rem', display: 'block' }}
+                        >
+                          {item.name}
+                        </Link>
+                        <span style={{ fontSize: '0.95rem', color: 'var(--primary-glow)', fontWeight: 'bold' }}>
+                          ${item.price.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                      <button
+                        onClick={() => addToCart(item, 1)}
+                        disabled={item.countInStock === 0}
+                        className="cyber-btn"
+                        style={{ padding: '6px 12px', fontSize: '0.75rem', borderRadius: '4px' }}
+                      >
+                        <ShoppingCart size={12} /> Add
+                      </button>
+
+                      <button
+                        onClick={() => toggleWishlist(item)}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'var(--danger)',
+                          cursor: 'pointer',
+                          padding: '6px',
+                        }}
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
