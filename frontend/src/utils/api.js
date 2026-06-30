@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://e-commerce-5-in8f.onrender.com/api',
+  baseURL: 'https://e-commerce-ujp8.onrender.com/api',
 });
 
 // Request interceptor to add JWT token to Authorization headers
